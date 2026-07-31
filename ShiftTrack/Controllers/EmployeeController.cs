@@ -1,0 +1,70 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using ShiftTrack.Models;
+using ShiftTrack.Services;
+
+namespace ShiftTrack.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class EmployeeController : ControllerBase
+    {
+        private readonly IEmployeeService _employeeService;
+
+        public EmployeeController(IEmployeeService employeeService)
+        {
+            _employeeService = employeeService;
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            return Ok(await _employeeService.GetAllEmployeesAsync());
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var shift = await _employeeService.GetEmployeeByIdAsync(id);
+
+            if (shift == null)
+                return NotFound();
+
+            return Ok(shift);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Employee employee)
+        {
+            var createdEmployee = await _employeeService.CreateEmployeeAsync(employee);
+
+            return CreatedAtAction(
+                nameof(GetById),
+                new { id = employee.EmployeeId },
+                createdEmployee);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, Employee employee)
+        {
+            var updated = await _employeeService.UpdateEmployeeAsync(id, employee);
+
+            if (!updated)
+                return NotFound();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var deleted = await _employeeService.DeleteEmployeeAsync(id);
+
+            if (!deleted)
+                return NotFound();
+
+            return NoContent();
+        }
+    }
+}
