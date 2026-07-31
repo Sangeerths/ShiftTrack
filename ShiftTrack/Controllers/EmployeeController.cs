@@ -1,72 +1,68 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ShiftTrack.DTO.Employees;
-using ShiftTrack.Models;
 using ShiftTrack.Services;
+namespace ShiftTrack.Controllers;
 
-namespace ShiftTrack.Controllers
+[Route("api/[controller]")]
+[ApiController]
+public class EmployeeController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class EmployeeController : ControllerBase
+    private readonly IEmployeeService _employeeService;
+
+    public EmployeeController(IEmployeeService employeeService)
     {
-        private readonly IEmployeeService _employeeService;
-
-        public EmployeeController(IEmployeeService employeeService)
-        {
-            _employeeService = employeeService;
-        }
+        _employeeService = employeeService;
+    }
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            return Ok(await _employeeService.GetAllEmployeesAsync());
-        }
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        return Ok(await _employeeService.GetAllEmployeesAsync());
+    }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var shift = await _employeeService.GetEmployeeByIdAsync(id);
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var shift = await _employeeService.GetEmployeeByIdAsync(id);
 
-            if (shift == null)
-                return NotFound();
+        if (shift == null)
+            return NotFound();
 
-            return Ok(shift);
-        }
+        return Ok(shift);
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateEmployeeDto employee)
-        {
-            var createdEmployee = await _employeeService.CreateEmployeeAsync(employee);
+    [HttpPost]
+    public async Task<IActionResult> Create(CreateEmployeeDto employee)
+    {
+        var createdEmployee = await _employeeService.CreateEmployeeAsync(employee);
 
-            return CreatedAtAction(
-         nameof(GetById),
-         new { id = createdEmployee.EmployeeId },
-         createdEmployee);
-        }
+        return CreatedAtAction(
+     nameof(GetById),
+     new { id = createdEmployee.EmployeeId },
+     createdEmployee);
+    }
 
-        [HttpPut]
-        public async Task<IActionResult> Update(UpdateEmployeeDto employee)
-        {
-           
-            var updated = await _employeeService.UpdateEmployeeAsync( employee);
+    [HttpPut]
+    public async Task<IActionResult> Update(UpdateEmployeeDto employee)
+    {
+       
+        var updated = await _employeeService.UpdateEmployeeAsync( employee);
 
-            if (!updated)
-                return NotFound();
+        if (!updated)
+            return NotFound();
 
-            return NoContent();
-        }
+        return NoContent();
+    }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var deleted = await _employeeService.DeleteEmployeeAsync(id);
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var deleted = await _employeeService.DeleteEmployeeAsync(id);
 
-            if (!deleted)
-                return NotFound();
+        if (!deleted)
+            return NotFound();
 
-            return NoContent();
-        }
+        return NoContent();
     }
 }
