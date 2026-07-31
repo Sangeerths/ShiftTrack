@@ -1,4 +1,5 @@
-﻿using ShiftTrack.Models;
+﻿using ShiftTrack.DTO.Shifts;
+using ShiftTrack.Models;
 
 namespace ShiftTrack.Services
 {
@@ -6,8 +7,8 @@ namespace ShiftTrack.Services
     {
         Task<List<Shift>> GetAllShiftsAsync();
         Task<Shift?> GetShiftByIdAsync(int id);
-        Task<Shift> CreateShiftAsync(Shift shift);
-        Task<bool> UpdateShiftAsync(int id, Shift shift);
+        Task<Shift> CreateShiftAsync(CreateShiftsDto shift);
+        Task<bool> UpdateShiftAsync(UpdateShiftsDto shift);
         Task<bool> DeleteShiftAsync(int id);
     }
 }

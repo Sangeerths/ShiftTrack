@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ShiftTrack.DTO.Shifts;
 using ShiftTrack.Models;
 using ShiftTrack.Services;
 
@@ -33,7 +34,7 @@ namespace ShiftTrack.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Shift shift)
+        public async Task<IActionResult> Create(CreateShiftsDto shift)
         {
             var createdShift = await _shiftService.CreateShiftAsync(shift);
 

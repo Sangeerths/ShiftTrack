@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShiftTrack.Data;
+using ShiftTrack.DTO.Shifts;
 using ShiftTrack.Models;
 
 namespace ShiftTrack.Services;
@@ -27,17 +28,27 @@ public class ShiftService: IShiftService
             .FirstOrDefaultAsync(s => s.ShiftId == id);
     }
 
-    public async Task <Shift> CreateShiftAsync(Shift shift)
+    public async Task <Shift> CreateShiftAsync(CreateShiftsDto dto)
     {
+        var shift = new Shift
+        {
+            EmployeeId = dto.EmployeeId,
+            Employee = dto.Employee,
+            ClockInTime = dto.ClockInTime,
+            ClockOutTime = dto.ClockOutTime,
+            Notes = dto.Notes,
+            Status = dto.Status,
+            CreatedAt = dto.CreatedAt,
+        };
           _dbContext.Shifts.Add(shift);
           await _dbContext.SaveChangesAsync();
           return shift;
     }
 
-    public async Task<bool> UpdateShiftAsync(int id, Shift shift)
+    public async Task<bool> UpdateShiftAsync(UpdateShiftsDto shift)
     {
         var existingShift = await _dbContext.Shifts
-            .FirstOrDefaultAsync(s => s.ShiftId == id);
+            .FirstOrDefaultAsync(s => s.ShiftId == shift.ShiftId);
 
         if (existingShift == null)
         {

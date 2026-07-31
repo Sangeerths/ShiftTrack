@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShiftTrack.Data;
+using ShiftTrack.DTO.Employees;
 using ShiftTrack.Models;
 
 namespace ShiftTrack.Services
@@ -25,17 +26,23 @@ namespace ShiftTrack.Services
                 .FirstOrDefaultAsync(e => e.EmployeeId == id);
         }
 
-        public async Task<Employee> CreateEmployeeAsync(Employee employee)
+        public async Task<Employee> CreateEmployeeAsync(CreateEmployeeDto dto)
         {
+            var employee = new Employee
+            {
+                Name = dto.Name
+            };
+
             _dbContext.Employees.Add(employee);
             await _dbContext.SaveChangesAsync();
+
             return employee;
         }
 
-        public async Task<bool> UpdateEmployeeAsync(int id, Employee employee)
+        public async Task<bool> UpdateEmployeeAsync(UpdateEmployeeDto employee)
         {
             var existingEmployee = await _dbContext.Employees
-                .FirstOrDefaultAsync(e => e.EmployeeId == id);
+                .FirstOrDefaultAsync(e => e.EmployeeId == employee.EmployeeId);
 
             if (existingEmployee == null)
             {
@@ -43,7 +50,7 @@ namespace ShiftTrack.Services
             }
 
             existingEmployee.EmployeeId = employee.EmployeeId;
-            existingEmployee.Name = employee.Name;
+            existingEmployee.Name = employee.EmployeeName;
             existingEmployee.UpdatedAt = employee.UpdatedAt;
 
             await _dbContext.SaveChangesAsync();

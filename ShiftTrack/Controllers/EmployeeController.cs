@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ShiftTrack.DTO.Employees;
 using ShiftTrack.Models;
 using ShiftTrack.Services;
 
@@ -35,20 +36,19 @@ namespace ShiftTrack.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Employee employee)
+        public async Task<IActionResult> Create(CreateEmployeeDto employee)
         {
             var createdEmployee = await _employeeService.CreateEmployeeAsync(employee);
 
             return CreatedAtAction(
-                nameof(GetById),
-                new { id = employee.EmployeeId },
-                createdEmployee);
+        nameof(GetById),
+        employee);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Employee employee)
+        public async Task<IActionResult> Update(UpdateEmployeeDto employee)
         {
-            var updated = await _employeeService.UpdateEmployeeAsync(id, employee);
+            var updated = await _employeeService.UpdateEmployeeAsync( employee);
 
             if (!updated)
                 return NotFound();
