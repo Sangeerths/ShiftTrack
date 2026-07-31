@@ -41,13 +41,15 @@ namespace ShiftTrack.Controllers
             var createdEmployee = await _employeeService.CreateEmployeeAsync(employee);
 
             return CreatedAtAction(
-        nameof(GetById),
-        employee);
+         nameof(GetById),
+         new { id = createdEmployee.EmployeeId },
+         createdEmployee);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> Update(UpdateEmployeeDto employee)
         {
+           
             var updated = await _employeeService.UpdateEmployeeAsync( employee);
 
             if (!updated)

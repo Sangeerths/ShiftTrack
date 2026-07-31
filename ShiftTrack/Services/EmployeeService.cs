@@ -41,6 +41,7 @@ namespace ShiftTrack.Services
 
         public async Task<bool> UpdateEmployeeAsync(UpdateEmployeeDto employee)
         {
+
             var existingEmployee = await _dbContext.Employees
                 .FirstOrDefaultAsync(e => e.EmployeeId == employee.EmployeeId);
 
@@ -49,7 +50,6 @@ namespace ShiftTrack.Services
                 return false;
             }
 
-            existingEmployee.EmployeeId = employee.EmployeeId;
             existingEmployee.Name = employee.EmployeeName;
             existingEmployee.UpdatedAt = employee.UpdatedAt;
 
