@@ -45,9 +45,9 @@ namespace ShiftTrack.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Shift shift)
+        public async Task<IActionResult> Update(UpdateShiftsDto shift)
         {
-            var updated = await _shiftService.UpdateShiftAsync(id, shift);
+            var updated = await _shiftService.UpdateShiftAsync(shift);
 
             if (!updated)
                 return NotFound();
