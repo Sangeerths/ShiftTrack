@@ -67,7 +67,7 @@ public class ShiftService: IShiftService
 
     public async Task<bool> UpdateShiftAsync(UpdateShiftsDto shift)
     {
-        var existingShift = await _dbContext.Shifts
+         var existingShift = await _dbContext.Shifts
             .FirstOrDefaultAsync(s => s.ShiftId == shift.ShiftId);
 
         if (existingShift == null)

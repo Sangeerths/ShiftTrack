@@ -10,49 +10,95 @@ public class EmployeeApiService
 
     public EmployeeApiService()
     {
-        _client = new HttpClient();
+        _client = new HttpClient
+        {
+            BaseAddress = new Uri("https://localhost:7098/")
+        };
         _validationService = new ValidationService();
     }
 
     public async Task<EmployeeDto[]> GetAllAsync()
     {
-        var employees = await _client.GetFromJsonAsync<EmployeeDto[]>("api/Employee");
-        return employees ?? Array.Empty<EmployeeDto>();
+        try
+        {
+            var employees = await _client.GetFromJsonAsync<EmployeeDto[]>("api/Employee");
+            return employees ?? Array.Empty<EmployeeDto>();
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
     public async Task<EmployeeDto?> GetByIdAsync(int id)
     {
-        _validationService.ValidateId(id);
-        var response = await _client.GetAsync($"api/Employee/{id}");
-        if (!response.IsSuccessStatusCode)
-            return null;
+        try
+        {
+            _validationService.ValidateId(id);
+            var response = await _client.GetAsync($"api/Employee/{id}");
+            if (!response.IsSuccessStatusCode)
+                return null;
 
-        return await response.Content.ReadFromJsonAsync<EmployeeDto>();
+            return await response.Content.ReadFromJsonAsync<EmployeeDto>();
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
     public async Task<bool> CreateAsync(CreateEmployeeDto dto)
     {
-        _validationService.ValidateName(dto.EmployeeName);
+        try
+        {
+            _validationService.ValidateName(dto.Name);
 
-        var payload = new { EmployeeName = dto.EmployeeName.Trim() };
-        var response = await _client.PostAsJsonAsync("api/Employee", payload);
-        return response.IsSuccessStatusCode;
+            var payload = new
+            {
+                Name = dto.Name.Trim()
+            };
+            var response = await _client.PostAsJsonAsync("api/Employee", payload);
+            return response.IsSuccessStatusCode;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
     public async Task<bool> UpdateAsync(UpdateEmployeeDto dto)
     {
-        _validationService.ValidateId(dto.EmployeeId);
-        _validationService.ValidateName(dto.EmployeeName);
+        try
+        {
+            _validationService.ValidateId(dto.EmployeeId);
+            _validationService.ValidateName(dto.Name);
 
-        var payload = new { EmployeeId = dto.EmployeeId, EmployeeName = dto.EmployeeName.Trim(), UpdatedAt = DateTime.UtcNow };
-        var response = await _client.PutAsJsonAsync($"api/Employee/{dto.EmployeeId}", payload);
-        return response.IsSuccessStatusCode;
+            var payload = new
+            {
+                EmployeeId = dto.EmployeeId,
+                Name = dto.Name.Trim(),
+                UpdatedAt = DateTime.UtcNow
+            };
+            var response = await _client.PutAsJsonAsync($"api/Employee", payload);
+            return response.IsSuccessStatusCode;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        _validationService.ValidateId(id);
-        var response = await _client.DeleteAsync($"api/Employee/{id}");
-        return response.IsSuccessStatusCode;
+        try
+        {
+            _validationService.ValidateId(id);
+            var response = await _client.DeleteAsync($"api/Employee/{id}");
+            return response.IsSuccessStatusCode;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 }

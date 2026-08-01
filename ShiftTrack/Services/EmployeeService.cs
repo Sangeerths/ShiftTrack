@@ -50,7 +50,7 @@ namespace ShiftTrack.Services
                 return false;
             }
 
-            existingEmployee.Name = employee.EmployeeName;
+            existingEmployee.Name = employee.Name;
             existingEmployee.UpdatedAt = employee.UpdatedAt;
 
             await _dbContext.SaveChangesAsync();

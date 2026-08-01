@@ -7,7 +7,7 @@ namespace ShiftTrack.UI.DTO.Employee
     public class EmployeeDto
     {
         public int EmployeeId { get; set; }
-        public string EmployeeName { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
     }
 }

@@ -9,6 +9,6 @@ namespace ShiftTrack.UI.DTO.Employee
     {
         [Required(ErrorMessage = "Employee name is required.")]
         [StringLength(100, MinimumLength = 1, ErrorMessage = "Employee name must be between 1 and 100 characters.")]
-        public string EmployeeName { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
     }
 }

@@ -35,12 +35,15 @@ public class EmployeeController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateEmployeeDto employee)
     {
-        var createdEmployee = await _employeeService.CreateEmployeeAsync(employee);
-
-        return CreatedAtAction(
-     nameof(GetById),
-     new { id = createdEmployee.EmployeeId },
-     createdEmployee);
+        try
+        {
+            var createdEmployee = await _employeeService.CreateEmployeeAsync(employee);
+            return Ok(createdEmployee);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.ToString());
+        }
     }
 
     [HttpPut]

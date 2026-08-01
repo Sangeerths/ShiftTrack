@@ -20,8 +20,16 @@ namespace ShiftTrack.UI.Services
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Employee name is required.");
 
-            if (name.Trim().Length > MaxNameLength)
+            name = name.Trim();
+
+            if (name.Length > MaxNameLength)
                 throw new ArgumentException($"Employee name cannot exceed {MaxNameLength} characters.");
+
+            if (name.Any(char.IsDigit))
+                throw new ArgumentException("Employee name cannot contain numbers.");
+
+            if (!name.All(c => char.IsLetter(c) || c == ' '))
+                throw new ArgumentException("Employee name can only contain letters and spaces.");
         }
 
         public void ValidateNotes(string? notes)
