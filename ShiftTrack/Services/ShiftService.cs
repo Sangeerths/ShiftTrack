@@ -14,18 +14,39 @@ public class ShiftService: IShiftService
         _dbContext = dbContext;
     }
 
-    public async Task<List<Shift>> GetAllShiftsAsync()
+    public async Task<List<ShiftResponseDto>> GetAllShiftsAsync()
     {
         return await _dbContext.Shifts
-            .Include(s => s.Employee)
-            .ToListAsync();
+        .Select(s => new ShiftResponseDto
+        {
+            ShiftId = s.ShiftId,
+            EmployeeId = s.EmployeeId,
+            EmployeeName = s.Employee.Name,
+            ClockInTime = s.ClockInTime,
+            ClockOutTime = s.ClockOutTime,
+            Notes = s.Notes,
+            Status = s.Status,
+            CreatedAt = s.CreatedAt
+        })
+        .ToListAsync();
     }
 
-    public async Task<Shift> GetShiftByIdAsync(int id)
+    public async Task<ShiftResponseDto> GetShiftByIdAsync(int id)
     {
         return await _dbContext.Shifts
-            .Include(s => s.Employee)
-            .FirstOrDefaultAsync(s => s.ShiftId == id);
+        .Where(s => s.ShiftId == id)
+        .Select(s => new ShiftResponseDto
+        {
+            ShiftId = s.ShiftId,
+            EmployeeId = s.EmployeeId,
+            EmployeeName = s.Employee.Name,
+            ClockInTime = s.ClockInTime,
+            ClockOutTime = s.ClockOutTime,
+            Notes = s.Notes,
+            Status = s.Status,
+            CreatedAt = s.CreatedAt
+        })
+        .FirstOrDefaultAsync();
     }
 
     public async Task <Shift> CreateShiftAsync(CreateShiftsDto dto)
@@ -33,7 +54,6 @@ public class ShiftService: IShiftService
         var shift = new Shift
         {
             EmployeeId = dto.EmployeeId,
-            Employee = dto.Employee,
             ClockInTime = dto.ClockInTime,
             ClockOutTime = dto.ClockOutTime,
             Notes = dto.Notes,
@@ -55,11 +75,21 @@ public class ShiftService: IShiftService
             return false;
         }
 
-        existingShift.EmployeeId = shift.EmployeeId;
-        existingShift.ClockInTime = shift.ClockInTime;
-        existingShift.ClockOutTime = shift.ClockOutTime;
-        existingShift.Notes = shift.Notes;
-        existingShift.Status = shift.Status;
+        if (shift.EmployeeId.HasValue)
+            existingShift.EmployeeId = shift.EmployeeId.Value;
+
+        if (shift.ClockInTime.HasValue)
+            existingShift.ClockInTime = shift.ClockInTime.Value;
+
+        if (shift.ClockOutTime.HasValue)
+            existingShift.ClockOutTime = shift.ClockOutTime;
+
+        if (shift.Notes != null)
+            existingShift.Notes = shift.Notes;
+
+        if (shift.Status.HasValue)
+            existingShift.Status = shift.Status.Value;
+
         existingShift.UpdatedAt = DateTime.UtcNow;
 
         await _dbContext.SaveChangesAsync();

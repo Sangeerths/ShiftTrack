@@ -5,12 +5,10 @@ namespace ShiftTrack.DTO.Shifts
     public class UpdateShiftsDto
     {
         public int ShiftId { get; set; }
-        public int EmployeeId { get; set; }
-        public Employee Employee { get; set; } = null!;
-        public DateTime ClockInTime { get; set; }
+        public int? EmployeeId { get; set; }
+        public DateTime? ClockInTime { get; set; }
         public DateTime? ClockOutTime { get; set; }
-        public string Notes { get; set; } = string.Empty;
-        public ShiftStatus Status { get; set; }
-        public DateTime? UpdatedAt { get; set; }
+        public string? Notes { get; set; }
+        public ShiftStatus? Status { get; set; }
     }
 }
