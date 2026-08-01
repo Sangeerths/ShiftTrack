@@ -1,3 +1,4 @@
 <Solution>
-  <Project Path="ShiftTrack/ShiftTrack.csproj" />
+  <Project Path="ShiftTrack.UI/ShiftTrack.UI.csproj" Id="31cb1950-fc88-4133-9ccf-2cc1d3cb9f43" />
+  <Project Path="ShiftTrack/ShiftTrack.API.csproj" />
 </Solution>
